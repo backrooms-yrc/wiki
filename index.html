@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条目创建工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            border-radius: 2px;
+        }
+        
+        .description {
+            color: #34495e;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 35px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .form-container {
+                flex-direction: row;
+            }
+        }
+        
+        .input-group {
+            flex: 1;
+            position: relative;
+        }
+        
+        input {
+            width: 100%;
+            padding: 20px 25px;
+            font-size: 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
+        
+        input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.25);
+        }
+        
+        input::placeholder {
+            color: #95a5a6;
+            font-weight: 500;
+        }
+        
+        button {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #2980b9, #1a252f);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .example {
+            margin-top: 25px;
+            font-style: italic;
+            color: #7f8c8d;
+            font-size: 1rem;
+            padding: 15px;
+            background: rgba(236, 240, 241, 0.5);
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 600px;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 20px;
+            width: 170px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+        }
+        
+        .feature i {
+            font-size: 2.8rem;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+        
+        .feature p {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+        
+        .status {
+            margin-top: 20px;
+            min-height: 25px;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1><i class="fas fa-file-medical"></i> 创建新条目</h1>
+            <p class="description">
+                在下方输入框中输入新条目的名称，点击"立即创建"按钮将在知识库中创建新页面。
+                系统会自动处理特殊字符并生成有效的URL。
+            </p>
+            
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="text" id="entryName" placeholder="在此输入新条目名称" autofocus>
+                </div>
+                <button id="createBtn">
+                    <i class="fas fa-rocket"></i> 立即创建
+                </button>
+            </div>
+            
+            <div id="status" class="status"></div>
+            
+            <p class="example">
+                例如：输入"项目计划"将创建 https://wiki.rcst20.dpdns.org/index.php?title=项目计划
+            </p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-mobile-alt"></i>
+                    <p>响应式设计</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-check-circle"></i>
+                    <p>可靠跳转</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <p>安全编码</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <p>即时创建</p>
+                </div>
+            </div>
+            
+            <p class="footer">
+                © 2023 知识库条目创建工具 | 支持所有现代浏览器
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('createBtn').addEventListener('click', function() {
+            const entryName = document.getElementById('entryName').value.trim();
+            const statusElement = document.getElementById('status');
+            
+            statusElement.textContent = '';
+            statusElement.style.color = '#e74c3c';
+            
+            if (!entryName) {
+                statusElement.textContent = '错误：请输入新条目名称';
+                document.getElementById('entryName').focus();
+                return;
+            }
+            
+            try {
+                // 正确编码URL参数
+                const encodedName = encodeURIComponent(entryName)
+                    .replace(/'/g, '%27')
+                    .replace(/\(/g, '%28')
+                    .replace(/\)/g, '%29');
+                
+                const url = `https://wiki.rcst20.dpdns.org/index.php?title=${encodedName}`;
+                
+                // 显示状态信息
+                statusElement.textContent = '正在跳转...';
+                statusElement.style.color = '#27ae60';
+                
+                // 添加短暂延迟让用户看到状态信息
+                setTimeout(() => {
+                    // 确保在新标签页中打开
+                    window.open(url, '_blank');
+                }, 300);
+                
+            } catch (error) {
+                statusElement.textContent = `错误：无法创建URL (${error.message})`;
+            }
+        });
+        
+        // 支持按回车键提交
+        document.getElementById('entryName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('createBtn').click();
+            }
+        });
+        
+        // 页面加载后自动聚焦到输入框
+        window.addEventListener('load', function() {
+            document.getElementById('entryName').focus();
+        });
+    </script>
+</body>
+</html>
